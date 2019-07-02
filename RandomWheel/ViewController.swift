@@ -20,6 +20,10 @@ class ViewController: UIViewController {
     @IBOutlet weak var cursor: UIImageView!
     
     
+    @IBOutlet weak var sliderControl: UIImageView!
+
+    
+    
     
     // FOR DATA
     var actualAngle: Double! = 0.0
@@ -28,19 +32,15 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.cursorStartRotation()
         // Do any additional setup after loading the view.
     }
 
     @IBAction func startButtonClicked(_ sender: Any) {
-        randomNumber = getRandomNumber()
+        randomNumber = 16 //getRandomNumber()
         displayRandomTurnsNumber(randomNumber)
-        if (randomNumber == 1) {
-            wheelRotationInAndOut()
-        } else if (randomNumber == 2) {
-            wheelTwoRotations()
-        } else {
-           wheelOverTwoRotations(randomNumber)
-        }
+        wheelOverTwoRotations(randomNumber)
     }
     
     
@@ -55,10 +55,10 @@ class ViewController: UIViewController {
     }
     
     func displayResultText(){
-        let number = position + randomNumber
-        let modulo = number % 8
-        position = (modulo == 0 ) ? 8 : (modulo/100 * 8) + 2
-        resultLabel.text = String(position)
+//        let number = position + randomNumber
+//        let modulo = number % 8
+//        position = (modulo == 0 ) ? 8 : (modulo/100 * 8) + 2
+//        resultLabel.text = String(position)
     }
     
     // MARK: - Utils Method
@@ -72,7 +72,66 @@ class ViewController: UIViewController {
     }
     
     
+    // MARK: - GESTURE RECOGNIZER METHODS
+    
+    
+    @IBAction func handlePan(recognizer: UIPanGestureRecognizer){
+        let minPosition = CGPoint(x: self.sliderControl.center.x, y: self.sliderControl.center.y - 128)
+        let maxPosition = CGPoint(x: self.sliderControl.center.x, y: self.sliderControl.center.y + 128)
+        var distances: [CGFloat] = []
+        let translation = recognizer.translation(in: self.view)
+        if let view = recognizer.view {
+            view.center = CGPoint(x: view.center.x, y: min(max(minPosition.y, view.center.y + translation.y), maxPosition.y))
+            distances.append(view.center.y - 85.0)
+        }
+        recognizer.setTranslation(CGPoint.zero, in: self.view)
+        
+        // Deceleration
+        if recognizer.state == UIGestureRecognizer.State.ended {
+            // 1
+            let velocity = recognizer.velocity(in: self.view)
+            let maxDistance = distances.max()
+            let distanceFactor = maxDistance! / 10
+            let magnitude = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y))
+            let slideMultiplier = magnitude * distanceFactor / 200
+            print("slideMultiplier: \(slideMultiplier)")
+            
+            
+            let turns = Int(slideMultiplier)
+            let numberOfTurns = (turns < 10) ? turns : (turns < 100) ? turns / 4 : (turns < 300) ? turns / 6 : (turns < 400) ? turns / 8 : (turns < 650) ? turns / 10 : (turns < 1250) ? turns / 15 : turns / 23
+            // 2
+            let slideFactor = 0.1 * Double(numberOfTurns)     //Increase for more of a slide
+            // 3
+            //var finalPoint = CGPoint(x:recognizer.view!.center.x ,
+            //                           y:recognizer.view!.center.y + (velocity.y * slideFactor))
+            // put out : + (velocity.x * slideFactor)
+            // 4
+            //finalPoint.x = min(max(finalPoint.x, 0), self.view.bounds.size.width)
+            //finalPoint.y = min(max(finalPoint.y, 0), self.view.bounds.size.height)
+            
+            let finalPoint = CGPoint(x:recognizer.view!.center.x ,
+                                    y: minPosition.y)
+            
+            
+            // 5
+            UIView.animate(withDuration: Double(slideFactor),  //*2
+                           delay: 0,
+                           // 6
+                options: UIView.AnimationOptions.curveEaseOut,
+                animations: {recognizer.view!.center = finalPoint },
+                completion: nil)
+            
+
+            displayRandomTurnsNumber(numberOfTurns)
+            wheelOverTwoRotations(Int(numberOfTurns))
+        }
+    }
+    
     // MARK: - Rotations methods
+    func cursorStartRotation(){
+        self.cursor.transform = CGAffineTransform(rotationAngle: -308.55)
+    }
+    
     
     func cursorRotation(){
         UIView.animate(
@@ -80,30 +139,49 @@ class ViewController: UIViewController {
             delay: 0.0,
             options: [.curveEaseOut],
             animations: {
-                self.cursor.transform = CGAffineTransform(rotationAngle: 45.0)
+                self.cursor.transform = CGAffineTransform(rotationAngle: -45.0)
         }, completion: { (finished: Bool) in
             UIView.animate(
                 withDuration: 0.2,
                 delay: 0.0,
                 options: [.curveEaseInOut],
                 animations: {
-                    self.cursor.transform = CGAffineTransform(rotationAngle: -45.0)
+                    self.cursor.transform = CGAffineTransform(rotationAngle: 45.0)
             }, completion: { (finished: Bool) in
                 UIView.animate(
                     withDuration: 0.2,
                     delay: 0.0,
                     options: [.curveEaseOut],
                     animations: {
-                        self.cursor.transform = CGAffineTransform(rotationAngle: 0.0)
+                        self.cursor.transform = CGAffineTransform(rotationAngle: -308.55)
                 }, completion: nil
                 )}
             )}
         )
     }
     
+    func cursorRotationWithOutReturn() {
+        UIView.animate(
+            withDuration: 0.1,
+            delay: 0.0,
+            options: [.curveEaseInOut],
+            animations: {
+                self.cursor.transform = CGAffineTransform(rotationAngle: -45.0)
+        }, completion: { (finished: Bool) in
+            UIView.animate(
+                withDuration: 0.05,
+                delay: 0.0,
+                options: [.curveEaseOut],
+                animations: {
+                    self.cursor.transform = CGAffineTransform(rotationAngle: -308.45)
+            }, completion: nil
+        )}
+        )
+    }
+    
     
     func wheelTwoRotations() {
-        actualAngle -= .pi/4
+        actualAngle += .pi/4
         let actualAngleCGFloat = CGFloat(actualAngle)
         UIView.animate(
             withDuration: 1,
@@ -120,7 +198,7 @@ class ViewController: UIViewController {
     }
     
     func wheelOverTwoRotations(_ number: Int){
-        actualAngle -= .pi/4
+        actualAngle += .pi/4
         let actualAngleCGFloat = CGFloat(actualAngle)
         let index = number
         UIView.animate(
@@ -139,8 +217,8 @@ class ViewController: UIViewController {
     
     func wheelRotation(_ number: Int){
         var index = number
-        if index > 2 {
-            actualAngle -= .pi/4
+        if index > 1 {
+            actualAngle += .pi/4
             let actualAngleCGFloat = CGFloat(actualAngle)
             UIView.animate(
                 withDuration: 0.1,
@@ -161,7 +239,7 @@ class ViewController: UIViewController {
     }
     
     func wheelRotationIn(){
-        actualAngle -= .pi/4
+        actualAngle += .pi/4
         let actualAngleCGFloat = CGFloat(actualAngle)
         UIView.animate(
             withDuration: 0.5,
@@ -176,7 +254,7 @@ class ViewController: UIViewController {
     }
     
     func wheelRotationInAndOut(){
-        actualAngle -= .pi/4
+        actualAngle += .pi/4
         let actualAngleCGFloat = CGFloat(actualAngle)
         UIView.animate(
             withDuration: 1.0,
@@ -192,7 +270,7 @@ class ViewController: UIViewController {
         )
     }
     func wheelRotationOut(){
-        actualAngle -= .pi/4
+        actualAngle += .pi/4
         let actualAngleCGFloat = CGFloat(actualAngle)
         UIView.animate(
             withDuration: 0.5,
@@ -200,9 +278,12 @@ class ViewController: UIViewController {
             options: [.curveEaseOut],
             animations: {
                 self.wheelImageView.transform = CGAffineTransform(rotationAngle: actualAngleCGFloat)
+                
         },
             completion: {(finished: Bool) in
                 self.displayResultText()
+                self.cursorRotationWithOutReturn()
+                
         }
         )
     }

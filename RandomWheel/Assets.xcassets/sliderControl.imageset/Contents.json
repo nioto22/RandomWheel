@@ -2,11 +2,11 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "wheel3.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
+      "filename" : "sliderControl2.png",
       "scale" : "2x"
     },
     {
