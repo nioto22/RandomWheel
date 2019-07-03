@@ -12,70 +12,123 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var wheelImageView: UIImageView!
     @IBOutlet weak var startButtoon: UIButton!
-   
     @IBOutlet weak var numberOfTurnsLabel: UILabel!
-    
     @IBOutlet weak var resultLabel: UILabel!
-    
     @IBOutlet weak var cursor: UIImageView!
-    
-    
     @IBOutlet weak var sliderControl: UIImageView!
 
+    @IBOutlet weak var categoryLabel: UILabel!
+    @IBOutlet weak var activityLabel: UILabel!
     
-    
+    @IBOutlet weak var resultImage: UIImageView!
     
     // FOR DATA
     var actualAngle: Double! = 0.0
     var randomNumber: Int!
-    var position: Int! = 0
+    var position: Int! = 1
+    var activityIsHidden: Bool = false
+    var numberOfTurns: Int! = 0
+    var category: String!
+    var activity: String!
+    let categories: [String] = ["Jeux de société", "Compétition", "Reflexion", "Sciences", "Arts créatifs", "Sport", "Bricolage", "Cuisine"]
+    let activities: [String: Array<String>] = ["1": ["Puzzle", "Cache-cache", "Sport", "Dessin","Puzzle", "Cache-cache", "Sport", "Dessin","Puzzle", "Cache-cache", "Sport", "Dessin","Puzzle", "Cache-cache", "Sport", "Dessin"],
+                                         "2": ["Magie", "Mime", "Cabane", "Ping-Pong"],
+                                         "3": ["Cuisine", "Mikado", "Avion en papier", "Ballon"]
+                                        ]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.cursorStartRotation()
-        // Do any additional setup after loading the view.
+        hiddenCategoriesLabelAndImage()
+        
     }
 
     @IBAction func startButtonClicked(_ sender: Any) {
-        randomNumber = 16 //getRandomNumber()
-        displayRandomTurnsNumber(randomNumber)
-        wheelOverTwoRotations(randomNumber)
+        multiplePushTransition(0, activities["1"]!, activities["1"]!.count * 4, 0)
     }
     
-    
-    @IBAction func testCursorButton(_ sender: Any) {
-        cursorRotation()
+    func multiplePushTransition(_ count: Int, _ array: Array<String>, _ repeatTime: Int, _ labelPosition: Int){
+        var mCount = count
+        CATransaction.begin()
+        CATransaction.setCompletionBlock({
+            mCount += 1
+            let newPosition = labelPosition + 1 < array.count ? labelPosition + 1 : 0
+            if (mCount < repeatTime) {
+                self.multiplePushTransition(mCount, array, repeatTime, newPosition)
+            } else {
+                return
+            }
+        })
+        let animation:CATransition = CATransition()
+        animation.timingFunction = CAMediaTimingFunction(name:
+        CAMediaTimingFunctionName.easeInEaseOut)
+        animation.type = CATransitionType.push
+        animation.subtype = CATransitionSubtype.fromBottom
+        animation.duration = 0.15
+        self.activityLabel.layer.add(animation, forKey: CATransitionType.push.rawValue)
+        CATransaction.commit()
+        self.activityLabel.text = array[labelPosition]
     }
+
     
     // MARK: - UI Methods
+    func hiddenCategoriesLabelAndImage() {
+        if !activityIsHidden {
+            categoryLabel.fadeOut()
+            resultImage.fadeOut()
+            activityLabel.fadeOut()
+            activityIsHidden = true
+        }
+    }
+        
+    func showCategoriesLabel(){
+        if activityIsHidden {
+            categoryLabel.fadeIn()
+            resultImage.image = UIImage(named: String(position))
+            resultImage.fadeIn(0.8)
+            activityLabel.fadeIn()
+            activityIsHidden = false
+        }
+    }
+    
+    func displayCategoryResult() {
+        getTheCategory()
+        categoryLabel.text = category
+        showCategoriesLabel()
+        //displayActivityResult()
+    }
+    
+    func displayActivityResult(){
+        
+    }
     
     func displayRandomTurnsNumber(_ number: Int){
         numberOfTurnsLabel.text = String(number)
     }
     
-    func displayResultText(){
-//        let number = position + randomNumber
-//        let modulo = number % 8
-//        position = (modulo == 0 ) ? 8 : (modulo/100 * 8) + 2
-//        resultLabel.text = String(position)
+    func getTheCategory(){
+        let newPosition = position + numberOfTurns
+        let posTemp = newPosition % 8
+        position = (posTemp != 0) ? posTemp : 8
+        category = categories[position - 1]
     }
+    
     
     // MARK: - Utils Method
     
-    func getRandomNumber() -> Int {
-        return Int.random(in: 16 ... 64)  // between 2 and 8 turns
+    func getRandomNumber(_ max: Int, _ min: Int = 0) -> Int {
+        return Int.random(in: min ... max)
     }
     
-    func getPositionOfTheWheel() -> Int!{
-       return 1
-    }
+    
     
     
     // MARK: - GESTURE RECOGNIZER METHODS
     
     
     @IBAction func handlePan(recognizer: UIPanGestureRecognizer){
+        hiddenCategoriesLabelAndImage()
         let minPosition = CGPoint(x: self.sliderControl.center.x, y: self.sliderControl.center.y - 128)
         let maxPosition = CGPoint(x: self.sliderControl.center.x, y: self.sliderControl.center.y + 128)
         var distances: [CGFloat] = []
@@ -98,40 +151,45 @@ class ViewController: UIViewController {
             
             
             let turns = Int(slideMultiplier)
-            let numberOfTurns = (turns < 10) ? turns : (turns < 100) ? turns / 4 : (turns < 300) ? turns / 6 : (turns < 400) ? turns / 8 : (turns < 650) ? turns / 10 : (turns < 1250) ? turns / 15 : turns / 23
+            numberOfTurns = (turns == 0) ? 1 : (turns < 10) ? turns : (turns < 100) ? turns / 4 : (turns < 300) ? turns / 6 : (turns < 400) ? turns / 8 : (turns < 650) ? turns / 10 : (turns < 1250) ? turns / 15 : turns / 23
             // 2
-            let slideFactor = 0.1 * Double(numberOfTurns)     //Increase for more of a slide
-            // 3
-            //var finalPoint = CGPoint(x:recognizer.view!.center.x ,
-            //                           y:recognizer.view!.center.y + (velocity.y * slideFactor))
-            // put out : + (velocity.x * slideFactor)
-            // 4
-            //finalPoint.x = min(max(finalPoint.x, 0), self.view.bounds.size.width)
-            //finalPoint.y = min(max(finalPoint.y, 0), self.view.bounds.size.height)
+            let slideFactor = 0.1 * Double(numberOfTurns)
             
             let finalPoint = CGPoint(x:recognizer.view!.center.x ,
                                     y: minPosition.y)
             
             
-            // 5
-            UIView.animate(withDuration: Double(slideFactor),  //*2
-                           delay: 0,
-                           // 6
-                options: UIView.AnimationOptions.curveEaseOut,
-                animations: {recognizer.view!.center = finalPoint },
-                completion: nil)
             
-
+            UIView.animate(withDuration: Double(slideFactor),
+                           delay: 0,
+                           options: UIView.AnimationOptions.curveEaseOut,
+                           animations: {recognizer.view!.center = finalPoint },
+                           completion: nil)
+            
             displayRandomTurnsNumber(numberOfTurns)
-            wheelOverTwoRotations(Int(numberOfTurns))
+            wheelRotation(Int(numberOfTurns))
         }
     }
     
     // MARK: - Rotations methods
+    func activityLabelRotation(){
+        category = "1"
+        activity = ""
+        if let activitiesCat = activities[category] {
+            let count = activitiesCat.count - 1
+            let randomActivity = getRandomNumber(count)
+            activity = activitiesCat[randomActivity]
+        }
+        categoryLabel.text = category
+        activityLabel.text = activity
+        hiddenCategoriesLabelAndImage()
+        
+        
+    }
+    
     func cursorStartRotation(){
         self.cursor.transform = CGAffineTransform(rotationAngle: -308.55)
     }
-    
     
     func cursorRotation(){
         UIView.animate(
@@ -173,45 +231,9 @@ class ViewController: UIViewController {
                 delay: 0.0,
                 options: [.curveEaseOut],
                 animations: {
-                    self.cursor.transform = CGAffineTransform(rotationAngle: -308.45)
+                    self.cursor.transform = CGAffineTransform(rotationAngle: -308.55)
             }, completion: nil
         )}
-        )
-    }
-    
-    
-    func wheelTwoRotations() {
-        actualAngle += .pi/4
-        let actualAngleCGFloat = CGFloat(actualAngle)
-        UIView.animate(
-            withDuration: 1,
-            delay: 0.0,
-            options: [.curveEaseIn],
-            animations: {
-                self.wheelImageView.transform = CGAffineTransform(rotationAngle: actualAngleCGFloat)
-        },
-            completion: { (finished: Bool) in
-                self.cursorRotation()
-                self.wheelRotationOut()
-        }
-        )
-    }
-    
-    func wheelOverTwoRotations(_ number: Int){
-        actualAngle += .pi/4
-        let actualAngleCGFloat = CGFloat(actualAngle)
-        let index = number
-        UIView.animate(
-            withDuration: 0.2,
-            delay: 0.0,
-            options: [],
-            animations: {
-                self.wheelImageView.transform = CGAffineTransform(rotationAngle: actualAngleCGFloat)
-        },
-            completion: { (finished: Bool) in
-                self.cursorRotation()
-                self.wheelRotation(index)
-        }
         )
     }
     
@@ -238,37 +260,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func wheelRotationIn(){
-        actualAngle += .pi/4
-        let actualAngleCGFloat = CGFloat(actualAngle)
-        UIView.animate(
-            withDuration: 0.5,
-            delay: 0.0,
-            options: [.curveEaseIn],
-            animations: {
-                self.wheelImageView.transform = CGAffineTransform(rotationAngle: actualAngleCGFloat)
-            },
-            completion: nil
-        )
-        
-    }
     
-    func wheelRotationInAndOut(){
-        actualAngle += .pi/4
-        let actualAngleCGFloat = CGFloat(actualAngle)
-        UIView.animate(
-            withDuration: 1.0,
-            delay: 0.0,
-            options: [.curveEaseInOut],
-            animations: {
-                self.wheelImageView.transform = CGAffineTransform(rotationAngle: actualAngleCGFloat)
-        },
-            completion: {(finished: Bool) in
-                self.cursorRotation()
-                self.displayResultText()
-        }
-        )
-    }
     func wheelRotationOut(){
         actualAngle += .pi/4
         let actualAngleCGFloat = CGFloat(actualAngle)
@@ -281,11 +273,10 @@ class ViewController: UIViewController {
                 
         },
             completion: {(finished: Bool) in
-                self.displayResultText()
+                self.displayCategoryResult()
                 self.cursorRotationWithOutReturn()
                 
         }
         )
     }
 }
-

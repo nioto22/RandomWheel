@@ -109,6 +109,40 @@
                                     <outletCollection property="gestureRecognizers" destination="8I0-nN-RrY" appends="YES" id="cjw-Ev-3JD"/>
                                 </connections>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HBZ-jZ-5xB">
+                                <rect key="frame" x="87" y="532.5" width="240" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="Dxe-cS-Cxi"/>
+                                    <constraint firstAttribute="width" constant="240" id="zW4-xK-5D0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="21"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XJw-FU-5Ml">
+                                <rect key="frame" x="87" y="582.5" width="240" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="U4A-sT-J9m"/>
+                                    <constraint firstAttribute="width" constant="240" id="gey-pu-ynR"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="wheelCenter" translatesAutoresizingMaskIntoConstraints="NO" id="JiY-P1-7S7">
+                                <rect key="frame" x="149.5" y="221.5" width="25" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="25" id="4fv-iZ-s8R"/>
+                                    <constraint firstAttribute="height" constant="25" id="Y0E-xc-iLf"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="1" translatesAutoresizingMaskIntoConstraints="NO" id="4Oh-LW-bao">
+                                <rect key="frame" x="107.5" y="179.5" width="109" height="109"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="109" id="eUX-Kk-dZ1"/>
+                                    <constraint firstAttribute="width" constant="109" id="wtE-ec-pK9"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.1137254902" blue="0.1764705882" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
@@ -118,9 +152,11 @@
                             <constraint firstItem="aM9-c8-kiL" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BiU-uh-pH3"/>
                             <constraint firstItem="aM9-c8-kiL" firstAttribute="top" secondItem="pCI-zr-qE4" secondAttribute="bottom" constant="5" id="CMx-Vb-lRT"/>
                             <constraint firstItem="QXv-ba-UlV" firstAttribute="centerX" secondItem="Ihx-Hw-72M" secondAttribute="centerX" id="Cr9-le-HWX"/>
+                            <constraint firstItem="JiY-P1-7S7" firstAttribute="centerX" secondItem="pCI-zr-qE4" secondAttribute="centerX" id="DeO-vU-HFR"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="7YM-Hu-nxr" secondAttribute="trailing" id="F8X-z4-ExI"/>
                             <constraint firstItem="Ihx-Hw-72M" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="12" id="H84-5P-gOf"/>
                             <constraint firstItem="lUo-Yk-4H5" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="38" id="JwD-2y-Xxo"/>
+                            <constraint firstItem="HBZ-jZ-5xB" firstAttribute="top" secondItem="7YM-Hu-nxr" secondAttribute="bottom" constant="40" id="KDh-bA-ChV"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="aM9-c8-kiL" secondAttribute="trailing" constant="25" id="LNL-au-21R"/>
                             <constraint firstItem="Uw5-4Y-8Lb" firstAttribute="top" secondItem="lUo-Yk-4H5" secondAttribute="top" constant="4" id="OD0-Av-Z2w"/>
                             <constraint firstItem="pCI-zr-qE4" firstAttribute="centerX" secondItem="Ihx-Hw-72M" secondAttribute="centerX" id="QsY-N3-orJ"/>
@@ -128,20 +164,29 @@
                             <constraint firstItem="aM9-c8-kiL" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="25" id="Rfk-4h-AMX"/>
                             <constraint firstItem="OpM-bi-GFf" firstAttribute="top" secondItem="aM9-c8-kiL" secondAttribute="bottom" constant="12" id="WVg-wP-A8x"/>
                             <constraint firstItem="7YM-Hu-nxr" firstAttribute="leading" secondItem="TVl-Ow-SSg" secondAttribute="trailing" constant="12" id="Z3Y-fS-130"/>
+                            <constraint firstItem="HBZ-jZ-5xB" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ZVU-EL-4JE"/>
                             <constraint firstItem="TVl-Ow-SSg" firstAttribute="top" secondItem="jxu-YA-f0p" secondAttribute="bottom" constant="12" id="bNG-kN-Lai"/>
                             <constraint firstItem="pCI-zr-qE4" firstAttribute="centerY" secondItem="Ihx-Hw-72M" secondAttribute="centerY" id="die-pp-opw"/>
+                            <constraint firstItem="XJw-FU-5Ml" firstAttribute="top" secondItem="HBZ-jZ-5xB" secondAttribute="bottom" constant="20" id="e7e-cv-r1k"/>
+                            <constraint firstItem="XJw-FU-5Ml" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="gfI-8O-DNe"/>
                             <constraint firstItem="OpM-bi-GFf" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="h3L-Ks-nqX"/>
                             <constraint firstItem="Ihx-Hw-72M" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="40" id="mky-tO-1uz"/>
                             <constraint firstItem="jxu-YA-f0p" firstAttribute="top" secondItem="aM9-c8-kiL" secondAttribute="bottom" constant="12" id="nBC-eD-bd0"/>
+                            <constraint firstItem="4Oh-LW-bao" firstAttribute="centerY" secondItem="pCI-zr-qE4" secondAttribute="centerY" id="s72-pk-9dH"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lUo-Yk-4H5" secondAttribute="trailing" constant="15" id="s9g-fb-pgp"/>
+                            <constraint firstItem="JiY-P1-7S7" firstAttribute="centerY" secondItem="pCI-zr-qE4" secondAttribute="centerY" id="vZm-Ua-cqg"/>
                             <constraint firstItem="OpM-bi-GFf" firstAttribute="leading" secondItem="jxu-YA-f0p" secondAttribute="trailing" constant="12" id="vh1-Ib-HUA"/>
                             <constraint firstItem="7YM-Hu-nxr" firstAttribute="top" secondItem="OpM-bi-GFf" secondAttribute="bottom" constant="12" id="xWn-E2-8Ms"/>
+                            <constraint firstItem="4Oh-LW-bao" firstAttribute="centerX" secondItem="pCI-zr-qE4" secondAttribute="centerX" id="zdr-8q-rRo"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
+                        <outlet property="activityLabel" destination="XJw-FU-5Ml" id="hED-wn-07x"/>
+                        <outlet property="categoryLabel" destination="HBZ-jZ-5xB" id="0by-v7-APL"/>
                         <outlet property="cursor" destination="QXv-ba-UlV" id="blJ-aV-pte"/>
                         <outlet property="numberOfTurnsLabel" destination="OpM-bi-GFf" id="oWx-RC-Xik"/>
+                        <outlet property="resultImage" destination="4Oh-LW-bao" id="cBI-ai-P5K"/>
                         <outlet property="resultLabel" destination="7YM-Hu-nxr" id="QQK-zq-YRe"/>
                         <outlet property="sliderControl" destination="lUo-Yk-4H5" id="WNL-PD-KWJ"/>
                         <outlet property="startButtoon" destination="aM9-c8-kiL" id="dXg-xQ-rgE"/>
@@ -160,10 +205,12 @@
         </scene>
     </scenes>
     <resources>
+        <image name="1" width="283" height="285"/>
         <image name="cursor" width="26" height="98.5"/>
         <image name="externalWheel" width="929" height="929"/>
         <image name="slider" width="53" height="65.5"/>
         <image name="sliderControl" width="25" height="482"/>
-        <image name="wheel" width="854" height="827"/>
+        <image name="wheel" width="862" height="864"/>
+        <image name="wheelCenter" width="20" height="20"/>
     </resources>
 </document>
