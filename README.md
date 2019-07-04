@@ -1,5 +1,7 @@
-# RandomWheel
-Wheel animations : wheel rotation function of cursor swiped and label animation in slot machine style
+# RandomWheel 
+Swift code for iOs of wheel animations : 
+  - one wheel rotation in function of cursor swiped
+  - one label rotation in slot machine style
 
 ![](randomWheel.gif)
 
