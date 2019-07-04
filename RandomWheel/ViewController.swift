@@ -203,7 +203,7 @@ class ViewController: UIViewController {
                 delay: 0.0,
                 options: [.curveEaseInOut],
                 animations: {
-                    self.cursor.transform = CGAffineTransform(rotationAngle: 45.0)
+                    self.cursor.transform = CGAffineTransform(rotationAngle: -308.0)
             }, completion: { (finished: Bool) in
                 UIView.animate(
                     withDuration: 0.2,
